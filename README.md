@@ -32,4 +32,91 @@ The system detects faces in a group image and identifies the person by comparing
 
 ---
 
+##  Project Structure
+
+
+face-recognition-yolo-facenet/
+│
+├── src/
+│ ├── build_database.py
+│ ├── recognize.py
+│
+├── models/
+├── input_images/
+│ ├── Db_buildup_images/
+│ └── Fresh_group_images/
+│
+├── Db_embeddings.txt
+├── requirements.txt
+└── README.md
+
+##  Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Hitesh304/face-recognition-yolo-facenet.git
+cd face-recognition-yolo-facenet
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+#install the dependencies in virtual enviroment
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+
+Build Database
+
+Place labeled face images inside:
+
+input_images/Db_buildup_images/
+
+Then run:
+
+python src/build_database.py
+
+This generates Db_embeddings.txt.
+
+🔍 Run Face Recognition
+
+Place group image inside:
+
+input_images/Fresh_group_images/
+
+Update image name in recognize.py if needed.
+
+Then run:
+
+python src/recognize.py
+
+The system will:
+
+Detect faces
+
+Compare embeddings
+
+Display best matched identity
+
+Similarity Threshold
+
+Cosine similarity threshold used: 0.6
+
+Value chosen experimentally
+
+Can be tuned based on dataset
+
+🛠 Technologies Used
+
+Python
+
+Ultralytics YOLO
+
+TensorFlow
+
+Keras-FaceNet
+
+OpenCV
+
+NumPy
 
