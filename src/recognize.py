@@ -1,5 +1,5 @@
 #csv format
-from anyio import Path
+from pathlib import Path
 import numpy as np
 import tensorflow as tf
 import cv2
@@ -8,10 +8,10 @@ from ultralytics import YOLO
 from keras_facenet import FaceNet
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).parent.parent
 
 # ================= PARAMETERS =================
-YOLO_MODEL_PATH = BASE_DIR / "models" / "10epochs.pt"
+YOLO_MODEL_PATH = BASE_DIR / "models" / "Face_detection_trained_for_10epochs.pt"
 GROUP_IMAGE_PATH = BASE_DIR / "input_images" / "group.jpeg"
 DB_FILE = BASE_DIR / "Db_embeddings.txt"
 OUTPUT_CSV = BASE_DIR / "attendance.csv"
@@ -66,7 +66,7 @@ def generate_attendance():
     if len(boxes) == 0:
         print("No faces detected.")
     else:
-        img = cv2.imread(GROUP_IMAGE_PATH)
+        img = cv2.imread(str(GROUP_IMAGE_PATH))
         rgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         h, w, _ = rgb_img.shape
 
