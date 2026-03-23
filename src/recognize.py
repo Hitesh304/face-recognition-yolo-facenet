@@ -6,6 +6,8 @@ import cv2
 import csv
 from ultralytics import YOLO
 from keras_facenet import FaceNet
+import pathlib
+pathlib.PosixPath = pathlib.WindowsPath
 
 
 BASE_DIR = Path(__file__).parent.parent
@@ -17,7 +19,7 @@ DB_FILE = BASE_DIR / "Db_embeddings.txt"
 OUTPUT_CSV = BASE_DIR / "attendance.csv"
 
 YOLO_CONF_THRESHOLD = 0.4
-THRESHOLD = 0.5
+THRESHOLD = 0.65
 IMAGE_SIZE = 160
 # ==============================================
 
@@ -121,9 +123,15 @@ def generate_attendance():
         writer = csv.writer(file)
         writer.writerow(["Name", "Attendance"])
         writer.writerows(sorted_attendance)
+        return OUTPUT_CSV
+
+        
 
     print("Attendance CSV Generated:", OUTPUT_CSV)
 
 
 # -------- RUN --------
 generate_attendance()
+output_path = "output/attendance.csv"
+
+    
