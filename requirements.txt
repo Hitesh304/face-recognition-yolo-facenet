@@ -4,3 +4,4 @@ keras-facenet
 opencv-python
 numpy
 uvicorn
+fastapi
