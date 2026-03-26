@@ -4,7 +4,8 @@ import shutil
 from pathlib import Path
 
 import pathlib
-pathlib.PosixPath = pathlib.WindowsPath
+#enable below comment if using windows
+#pathlib.PosixPath = pathlib.WindowsPath
 
 #image  upload api for building database, not for recognition
 
