@@ -7,7 +7,8 @@ import csv
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import pathlib
-pathlib.PosixPath = pathlib.WindowsPath
+# enable only if u are using windows
+#pathlib.PosixPath = pathlib.WindowsPath
 
 
 BASE_DIR = Path(__file__).parent.parent
