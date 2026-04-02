@@ -1,4 +1,4 @@
-#csv format
+# csv format
 from pathlib import Path
 import numpy as np
 import tensorflow as tf
@@ -7,6 +7,8 @@ import csv
 from ultralytics import YOLO
 from keras_facenet import FaceNet
 import pathlib
+
+# Windows compatibility fix
 pathlib.PosixPath = pathlib.WindowsPath
 
 
@@ -14,7 +16,7 @@ BASE_DIR = Path(__file__).parent.parent
 
 # ================= PARAMETERS =================
 YOLO_MODEL_PATH = BASE_DIR / "models" / "Face_detection_trained_for_10epochs.pt"
-GROUP_IMAGE_PATH = BASE_DIR / "input_images" / "group.jpeg"
+INPUT_DIR = BASE_DIR / "input_images"
 DB_FILE = BASE_DIR / "Db_embeddings.txt"
 OUTPUT_CSV = BASE_DIR / "attendance.csv"
 
@@ -22,6 +24,24 @@ YOLO_CONF_THRESHOLD = 0.4
 THRESHOLD = 0.65
 IMAGE_SIZE = 160
 # ==============================================
+
+
+# -------- GET IMAGE DYNAMICALLY --------
+def get_group_image_path():
+    extensions = [".jpg", ".jpeg", ".png"]
+
+    images = [f for f in INPUT_DIR.iterdir() if f.suffix.lower() in extensions]
+
+    if not images:
+        raise ValueError("❌ No image found in input_images folder")
+
+    # pick latest image (best practice)
+    images = sorted(images, key=lambda x: x.stat().st_mtime, reverse=True)
+
+    if len(images) > 1:
+        print(f"⚠️ Multiple images found, using latest: {images[0].name}")
+
+    return images[0]
 
 
 # -------- LOAD MODELS --------
@@ -47,11 +67,14 @@ def load_database():
 
 # -------- COSINE SIMILARITY --------
 def cosine_similarity(a, b):
-    return np.dot(a, b)  # embeddings already normalized
+    return np.dot(a, b)
 
 
 # -------- MAIN FUNCTION --------
 def generate_attendance():
+
+    GROUP_IMAGE_PATH = get_group_image_path()
+    print(f"📸 Using image: {GROUP_IMAGE_PATH.name}")
 
     db_names, db_embeddings = load_database()
 
@@ -66,7 +89,7 @@ def generate_attendance():
     boxes = results[0].boxes
 
     if len(boxes) == 0:
-        print("No faces detected.")
+        print("❌ No faces detected.")
     else:
         img = cv2.imread(str(GROUP_IMAGE_PATH))
         rgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -111,27 +134,19 @@ def generate_attendance():
     # -------- SORT ATTENDANCE --------
     sorted_attendance = sorted(
         attendance.items(),
-        key=lambda x: x[1],  # Present first
+        key=lambda x: x[1] == "Absent"
     )
-
-    # Since "Absent" > "Present" alphabetically,
-    # we reverse to put Present at top
-    sorted_attendance.sort(key=lambda x: x[1] == "Absent")
 
     # -------- WRITE CSV --------
     with open(OUTPUT_CSV, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Name", "Attendance"])
         writer.writerows(sorted_attendance)
-        return OUTPUT_CSV
 
-        
-
-    print("Attendance CSV Generated:", OUTPUT_CSV)
+    print("✅ Attendance CSV Generated:", OUTPUT_CSV)
+    return OUTPUT_CSV
 
 
 # -------- RUN --------
-generate_attendance()
-output_path = "output/attendance.csv"
-
-    
+if __name__ == "__main__":
+    generate_attendance()
