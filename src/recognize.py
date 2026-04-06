@@ -9,7 +9,7 @@ from keras_facenet import FaceNet
 import pathlib
 
 # Windows compatibility fix
-pathlib.PosixPath = pathlib.WindowsPath
+#pathlib.PosixPath = pathlib.WindowsPath
 
 
 BASE_DIR = Path(__file__).parent.parent
