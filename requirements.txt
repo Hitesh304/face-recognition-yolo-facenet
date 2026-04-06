@@ -1,5 +1,7 @@
+uvicorn
 ultralytics>=8.0.0
 tensorflow>=2.10.0
 keras-facenet
 opencv-python
 numpy
+fastapi
