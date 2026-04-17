@@ -99,7 +99,7 @@ def home():
 
     <body>
         <div class="container">
-            <h1>🚀 Face Recognition System</h1>
+            <h1> Face Recognition System</h1>
 
             <div class="card">
                 <h2>Register Faces</h2>
@@ -155,7 +155,7 @@ async def recognize_faces(file: UploadFile = File(...)):
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # 🔥 Tumhara actual logic yaha call hoga
+    
     from recognize import generate_attendance
     csv_path = generate_attendance()
 
