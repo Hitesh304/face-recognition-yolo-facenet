@@ -8,7 +8,7 @@ from ultralytics import YOLO
 from keras_facenet import FaceNet
 import pathlib
 
-# Windows compatibility fix
+# Windows compatibility fix,don't enable fi using linux 
 #pathlib.PosixPath = pathlib.WindowsPath
 
 
@@ -143,7 +143,7 @@ def generate_attendance():
         writer.writerow(["Name", "Attendance"])
         writer.writerows(sorted_attendance)
 
-    print("✅ Attendance CSV Generated:", OUTPUT_CSV)
+    print(" Attendance CSV Generated:", OUTPUT_CSV)
     return OUTPUT_CSV
 
 
